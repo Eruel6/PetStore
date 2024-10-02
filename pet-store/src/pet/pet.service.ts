@@ -14,7 +14,12 @@ export class PetService {
     }
 
     async buscaTodos(): Promise<Pet[]>{
-        const pets = await this.petModel.find();
+        const allPets = await this.petModel.find();
+        return allPets;
+    }
+
+    async buscaNome(nome: string): Promise<Pet[]>{
+        const pets = await this.petModel.find({nome}).lean();
         return pets;
     }
 
