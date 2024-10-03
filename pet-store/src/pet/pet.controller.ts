@@ -1,7 +1,7 @@
 import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { PetService } from './pet.service';
 import { Pet } from './schemas/pet.schema';
-import { createPetDto } from './dto/createPetDto';
+import { createPetDto } from './dto/create-pet.dto';
 
 @Controller('pets')
 export class PetController {
