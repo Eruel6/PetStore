@@ -23,8 +23,21 @@ export class PetService {
         return pets;
     }
 
+    async atualizaPorNome(nome: string, pet: Pet): Promise<Pet>{
+        return await this.petModel.findOneAndUpdate({nome}, {$set: pet},{
+            new: true,
+            runValidators: true},
+        ).lean();
+        
+    }
+
     async create(pet: Pet): Promise<Pet>{
         const res = await this.petModel.create(pet);
         return res;
     }
+
+    async deletaPorNome(nome: string): Promise<Pet>{
+        return await this.petModel.findOneAndDelete({nome}).lean();
+    }
+    
 }
