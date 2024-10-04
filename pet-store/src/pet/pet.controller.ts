@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { PetService } from './pet.service';
-import { Pet } from './schemas/pet.schema';
+import { Especies, Pet } from './schemas/pet.schema';
 import { createPetDto } from './dto/create-pet.dto';
 import { updatePetDto } from './dto/update-pet.dto';
 
@@ -25,6 +25,14 @@ export class PetController {
             return pets;
     }
 
+    @Get('detalhes/:nome')
+    async filtraPetEspecifico(@Param('nome')nome: string,
+        @Body()paramsToSearch: {dataDeNascimento: Date, especie: Especies, nomeTutor: string}): Promise<Pet>{
+            const pets = await this.petService.buscaEspecifico(nome,paramsToSearch.dataDeNascimento,paramsToSearch.especie,paramsToSearch.nomeTutor);
+
+            return pets;
+    }
+
     @Post()
     async createPet( @Body()Pet:createPetDto ): Promise<Pet>{
         return this.petService.create(Pet);
@@ -43,9 +51,9 @@ export class PetController {
     async deletePet (
         @Param('nome') nome: string,
 
-        @Body()ParansToDelete:{dataDeNascimento:Date,nomeTutor:string} ): Promise<Pet>{
+        @Body()ParamsToDelete:{dataDeNascimento:Date,nomeTutor:string} ): Promise<Pet>{
 
-        return this.petService.deletaPorNome(nome,ParansToDelete.dataDeNascimento,ParansToDelete.nomeTutor);
+        return this.petService.deletaPorNome(nome,ParamsToDelete.dataDeNascimento,ParamsToDelete.nomeTutor);
     }
 
     
