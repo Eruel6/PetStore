@@ -14,7 +14,7 @@ export class PetController {
             return this.petService.buscaTodos();
     }
 
-    @Get(':nome')
+    @Get('nome/:nome')
     async filtraPetNome(@Param('nome')nome: string): Promise<Pet[]>{
             const pets = await this.petService.buscaNome(nome);
             
@@ -24,6 +24,47 @@ export class PetController {
 
             return pets;
     }
+
+    @Get('data/:dataDeNascimento')
+    async filtraPetDataNascimento(@Param('dataDeNascimento')dataDeNascimento: string): Promise<Pet[]>{
+            const data = new Date(dataDeNascimento);
+
+            if (isNaN(data.getTime())) {
+                throw new Error(`Data inválida fornecida: ${data}`);
+            }
+
+            const pets = await this.petService.buscaDataNascimento(data);
+            
+            if(pets.length === 0){
+                throw new NotFoundException('Pet não encontrado, confira o nome!')
+            }
+
+            return pets;
+    }
+
+    @Get('especie/:especie')
+        async filtraPetEspecie(@Param('especie')especie: Especies): Promise<Pet[]>{
+                const pets = await this.petService.buscaEspecie(especie);
+                
+                if(pets.length === 0){
+                    throw new NotFoundException('Pet não encontrado, confira o nome!')
+                }
+
+                return pets;
+    }
+
+    @Get('tutor/:nomeTutor')
+    async filtraPetNomeTutor(@Param('nomeTutor')NomeTutor: string): Promise<Pet[]>{
+            const pets = await this.petService.buscaNomeTutor(NomeTutor);
+            
+            if(pets.length === 0){
+                throw new NotFoundException('Pet não encontrado, confira o nome!')
+            }
+
+            return pets;
+    }
+
+    
 
     @Get('detalhes/:nome')
     async filtraPetEspecifico(@Param('nome')nome: string,

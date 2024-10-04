@@ -23,6 +23,28 @@ export class PetService {
         return pets;
     }
 
+    async buscaDataNascimento(dataDeNascimento: Date): Promise<Pet[]>{
+
+        const startOfDay = new Date(dataDeNascimento);
+        startOfDay.setUTCHours(0, 0, 0, 0);  // Começo do dia
+    
+        const endOfDay = new Date(dataDeNascimento);
+        endOfDay.setUTCHours(23, 59, 59, 999);  // Fim do dia
+
+        const pets = await this.petModel.find({dataDeNascimento: {$gte: startOfDay, $lte:endOfDay}}).lean();
+        return pets;
+    }
+
+    async buscaEspecie(especie: Especies): Promise<Pet[]>{
+        const pets = await this.petModel.find({especie}).lean();
+        return pets;
+    }
+
+    async buscaNomeTutor(nomeTutor: string): Promise<Pet[]>{
+        const pets = await this.petModel.find({nomeTutor}).lean();
+        return pets;
+    }
+
     async buscaEspecifico(nome: string, dataDeNascimento: Date, especie: Especies, nomeTutor: string): Promise<Pet>{
         return await this.petModel.findOne({nome, dataDeNascimento,especie, nomeTutor}).lean();
     }
