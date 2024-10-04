@@ -36,8 +36,8 @@ export class PetService {
         return res;
     }
 
-    async deletaPorNome(nome: string): Promise<Pet>{
-        return await this.petModel.findOneAndDelete({nome}).lean();
+    async deletaPorNome(nome: string, dataDeNascimento: Date, nomeTutor: string): Promise<Pet>{
+        return await this.petModel.findOneAndDelete({nome, dataDeNascimento, nomeTutor}).lean();
     }
     
 }

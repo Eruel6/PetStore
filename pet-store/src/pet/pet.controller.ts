@@ -43,9 +43,9 @@ export class PetController {
     async deletePet (
         @Param('nome') nome: string,
 
-        @Body()Pet:updatePetDto ): Promise<Pet>{
+        @Body()ParansToDelete:{dataDeNascimento:Date,nomeTutor:string} ): Promise<Pet>{
 
-        return this.petService.deletaPorNome(nome);
+        return this.petService.deletaPorNome(nome,ParansToDelete.dataDeNascimento,ParansToDelete.nomeTutor);
     }
 
     
