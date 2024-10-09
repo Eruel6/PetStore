@@ -13,36 +13,24 @@ export class PetService {
  
     }
 
-    async buscaTodos(): Promise<Pet[]>{
-        const allPets = await this.petModel.find();
-        return allPets;
-    }
+    async  buscaPets(filtros: {nome?: string, dataDeNascimento?: Date, especie?: Especies, nomeTutor?: string}): Promise<Pet[]>{
+        
+        const query: any = {};
 
-    async buscaNome(nome: string): Promise<Pet[]>{
-        const pets = await this.petModel.find({nome}).lean();
-        return pets;
-    }
+        if(filtros.nome){
+            query.nome = filtros.nome;
+        }
+        if(filtros.dataDeNascimento){
+            query.dataDeNascimento = filtros.dataDeNascimento;
+        }
+        if(filtros.especie){
+            query.especie = filtros.especie;
+        }
+        if(filtros.nomeTutor){
+            query.nomeTutor = filtros.nomeTutor;
+        }
 
-    async buscaDataNascimento(dataDeNascimento: Date): Promise<Pet[]>{
-
-        const startOfDay = new Date(dataDeNascimento);
-        startOfDay.setUTCHours(0, 0, 0, 0);  // Começo do dia
-    
-        const endOfDay = new Date(dataDeNascimento);
-        endOfDay.setUTCHours(23, 59, 59, 999);  // Fim do dia
-
-        const pets = await this.petModel.find({dataDeNascimento: {$gte: startOfDay, $lte:endOfDay}}).lean();
-        return pets;
-    }
-
-    async buscaEspecie(especie: Especies): Promise<Pet[]>{
-        const pets = await this.petModel.find({especie}).lean();
-        return pets;
-    }
-
-    async buscaNomeTutor(nomeTutor: string): Promise<Pet[]>{
-        const pets = await this.petModel.find({nomeTutor}).lean();
-        return pets;
+        return this.petModel.find(query).lean();
     }
 
     async buscaEspecifico(id: string): Promise<Pet>{
