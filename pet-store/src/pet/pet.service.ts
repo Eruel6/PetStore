@@ -45,12 +45,12 @@ export class PetService {
         return pets;
     }
 
-    async buscaEspecifico(nome: string, dataDeNascimento: Date, especie: Especies, nomeTutor: string): Promise<Pet>{
-        return await this.petModel.findOne({nome, dataDeNascimento,especie, nomeTutor}).lean();
+    async buscaEspecifico(id: string): Promise<Pet>{
+        return await this.petModel.findById(id).lean();
     }
 
-    async atualizaPorNome(nome: string, pet: Pet): Promise<Pet>{
-        return await this.petModel.findOneAndUpdate({nome}, {$set: pet},{
+    async atualiza(id: string, pet: Partial<Pet>): Promise<Pet>{
+        return await this.petModel.findByIdAndUpdate(id, {$set: pet},{
             new: true,
             runValidators: true},
         ).lean();
@@ -62,8 +62,8 @@ export class PetService {
         return res;
     }
 
-    async deletaPorNome(nome: string, dataDeNascimento: Date, nomeTutor: string): Promise<Pet>{
-        return await this.petModel.findOneAndDelete({nome, dataDeNascimento, nomeTutor}).lean();
+    async deleta(id: string): Promise<Pet>{
+        return await this.petModel.findByIdAndDelete(id).lean();
     }
     
 }

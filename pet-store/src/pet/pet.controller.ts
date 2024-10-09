@@ -66,10 +66,10 @@ export class PetController {
 
     
 
-    @Get('detalhes/:nome')
-    async filtraPetEspecifico(@Param('nome')nome: string,
-        @Body()paramsToSearch: {dataDeNascimento: Date, especie: Especies, nomeTutor: string}): Promise<Pet>{
-            const pets = await this.petService.buscaEspecifico(nome,paramsToSearch.dataDeNascimento,paramsToSearch.especie,paramsToSearch.nomeTutor);
+    @Get(':id')
+    async filtraPetEspecifico(@Param('id')id: string,
+        ): Promise<Pet>{
+            const pets = await this.petService.buscaEspecifico(id);
 
             return pets;
     }
@@ -79,22 +79,20 @@ export class PetController {
         return this.petService.create(Pet);
     }
 
-    @Put(':nome')
+    @Put(':id')
     async updatePet (
-        @Param('nome') nome: string,
+        @Param('id') id: string,
 
-        @Body()Pet:updatePetDto ): Promise<Pet>{
+        @Body()Pet: Partial<updatePetDto> ): Promise<Pet>{
 
-        return this.petService.atualizaPorNome(nome, Pet);
+        return this.petService.atualiza(id, Pet);
     }
 
-    @Delete(':nome')
+    @Delete(':id')
     async deletePet (
-        @Param('nome') nome: string,
+        @Param('id') id: string): Promise<Pet>{
 
-        @Body()ParamsToDelete:{dataDeNascimento:Date,nomeTutor:string} ): Promise<Pet>{
-
-        return this.petService.deletaPorNome(nome,ParamsToDelete.dataDeNascimento,ParamsToDelete.nomeTutor);
+        return this.petService.deleta(id);
     }
 
     
