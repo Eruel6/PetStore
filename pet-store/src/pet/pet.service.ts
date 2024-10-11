@@ -13,10 +13,15 @@ export class PetService {
  
     }
 
-    async  buscaPets(filtros: {nome?: string, dataDeNascimento?: Date, especie?: Especies, nomeTutor?: string}): Promise<Pet[]>{
+    async  buscaPets(filtros: {q?: string, nome?: string, dataDeNascimento?: Date, especie?: Especies, nomeTutor?: string}): Promise<Pet[]>{
         
         const query: any = {};
 
+        if(filtros.q){
+            // query.nome = /.*filtros.q.*/i;
+            
+            query.nome = { "$regex": filtros.q, $options: "i"};
+        }
         if(filtros.nome){
             query.nome = filtros.nome;
         }
@@ -29,6 +34,8 @@ export class PetService {
         if(filtros.nomeTutor){
             query.nomeTutor = filtros.nomeTutor;
         }
+
+        console.log(query);
 
         return this.petModel.find(query).lean();
     }

@@ -12,6 +12,7 @@ export class PetController {
 
     @Get('busca')
     async buscaPets(
+        @Query('q')q?: string,
         @Query('nome')nome?: string,
         @Query('dataDeNascimento')dataDeNascimento?: Date,
         @Query('especie')especie?: Especies,
@@ -21,6 +22,7 @@ export class PetController {
         
         const filtros: any = {};
 
+        if (q) filtros.q=q;
         if (nome) filtros.nome = nome;
         if (dataDeNascimento) filtros.dataDeNascimento = new Date(dataDeNascimento);
         if (especie) filtros.especie = especie;
@@ -29,7 +31,7 @@ export class PetController {
         return this.petService.buscaPets(filtros);
         
     }
-    
+
     @Get(':id')
     async filtraPetEspecifico(@Param('id')id: string,
         ): Promise<Pet>{
